@@ -7,20 +7,28 @@
 //
 
 import UIKit
+import CoreLocation
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, CLLocationManagerDelegate {
     
     var businesses: [Business]!
     var searchBar = UISearchBar()
     var filteredData: [String]!
     var searchTerm: String!
+    var locationManager : CLLocationManager!
+    var location: CLLocation?
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var mapButton: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //mapButton.
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.distanceFilter = 200
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
         
         searchTerm = "Thai"
         
@@ -33,26 +41,24 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         searchBar.sizeToFit()
         navigationItem.titleView = searchBar
-
-        searchYelpAPI(with: searchTerm)
-        
-        
     }
     
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.location = locations.last
+        searchYelpAPI(with: searchTerm)
+        print("location is being updated")
+        }
+
+    
     func searchYelpAPI(with searchTerm: String!){
-        Business.searchWithTerm(term: searchTerm, completion: { (businesses: [Business]?, error: Error?) -> Void in
+        print("Search is being called. location is \(self.location?.coordinate.latitude),\(self.location?.coordinate.longitude)")
+        Business.searchWithTerm(term: searchTerm, location: self.location, completion: { (businesses: [Business]?, error: Error?) -> Void in
             print("Search has been initiated with: \(searchTerm)")
             self.businesses = businesses
             self.tableView.reloadData()
             
-//            if let businesses = businesses {
-//                for business in businesses {
-//                    print(business.name!)
-//                    print(business.address!)
-//                }
-//            }
-            
         })
+        
         /* Example of Yelp search with more search options specified
          Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
          self.businesses = businesses

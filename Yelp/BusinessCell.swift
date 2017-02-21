@@ -11,7 +11,7 @@ import UIKit
 class BusinessCell: UITableViewCell {
 
 
-    @IBOutlet weak var thumbImageView: UIImageView!
+    @IBOutlet weak var thumbImageView: UIImageView?
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var ratingImageView: UIImageView!
@@ -22,7 +22,7 @@ class BusinessCell: UITableViewCell {
     var business: Business! {
         didSet {
             nameLabel.text = business.name
-            thumbImageView.setImageWith(business.imageURL!)
+            thumbImageView?.setImageWith((business.imageURL)!)
             categoriesLabel.text = business.categories
             addressLabel.text = business.address
             reviewsCountLabel.text = "\(business.reviewCount!) Reviews"
@@ -35,8 +35,8 @@ class BusinessCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        thumbImageView.layer.cornerRadius = 3
-        thumbImageView.clipsToBounds = true
+        thumbImageView?.layer.cornerRadius = 3
+        thumbImageView?.clipsToBounds = true
         
         //nameLabel.preferredMaxLayoutWidth = nameLabel.frame.size.width
     }

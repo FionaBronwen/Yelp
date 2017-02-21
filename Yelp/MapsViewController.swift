@@ -8,30 +8,48 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
-class MapsViewController: UIViewController {
+
+class MapsViewController: UIViewController, CLLocationManagerDelegate{
 
     @IBOutlet weak var mapView: MKMapView!
-    
+    var locationManager : CLLocationManager!
     var businesses: [Business]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let centerLocation = CLLocation(latitude: 37.7833, longitude: -122.4167)
-        goToLocation(location: centerLocation)
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.distanceFilter = 200
+        locationManager.requestWhenInUseAuthorization()
+        
+//        let centerLocation = CLLocation(latitude: 37.7833, longitude: -122.4167)
+//        goToLocation(location: centerLocation)
         
         if let businesses = self.businesses{
             for business in businesses {
                 addAnnotationAtAddress(address: business.address!, title: business.name!)
-
             }
             //print("Business Name: \(business.name) Business Address: \(business.address)")
         }
-        
-        
-        
         // Do any additional setup after loading the view.
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == CLAuthorizationStatus.authorizedWhenInUse {
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            let span = MKCoordinateSpanMake(0.1, 0.1)
+            let region = MKCoordinateRegionMake(location.coordinate, span)
+            mapView.setRegion(region, animated: false)
+        }
     }
     
     func goToLocation(location: CLLocation) {
