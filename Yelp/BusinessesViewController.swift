@@ -8,32 +8,48 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
     var businesses: [Business]!
+    var searchBar = UISearchBar()
+    var filteredData: [String]!
+    var searchTerm: String!
     
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        searchTerm = "Thai"
+        
         tableView.delegate = self
-        tableView.dataSource = self 
+        tableView.dataSource = self
+        searchBar.delegate = self
+        
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
-            
+        
+        searchBar.sizeToFit()
+        navigationItem.titleView = searchBar
+
+        searchYelpAPI(with: searchTerm)
+        
+        
+    }
+    
+    func searchYelpAPI(with searchTerm: String!){
+        Business.searchWithTerm(term: searchTerm, completion: { (businesses: [Business]?, error: Error?) -> Void in
+            print("Search has been initiated with: \(searchTerm)")
             self.businesses = businesses
             self.tableView.reloadData()
-            if let businesses = businesses {
-                for business in businesses {
-                    print(business.name!)
-                    print(business.address!)
-                }
-            }
             
-            }
-        )
-        
+//            if let businesses = businesses {
+//                for business in businesses {
+//                    print(business.name!)
+//                    print(business.address!)
+//                }
+//            }
+            
+        })
         /* Example of Yelp search with more search options specified
          Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
          self.businesses = businesses
@@ -44,8 +60,30 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
          }
          }
          */
-        
     }
+    
+    
+    public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchYelpAPI(with: searchTerm)
+    }
+    
+    
+    public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchTerm = searchText
+    }
+    
+    //show cancel button
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+    }
+    
+    
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         if businesses != nil {
