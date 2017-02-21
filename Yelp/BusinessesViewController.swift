@@ -16,8 +16,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     var searchTerm: String!
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var mapButton: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //mapButton.
         
         searchTerm = "Thai"
         
@@ -106,14 +109,19 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
     
-    /*
-     // MARK: - Navigation
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        
+        if let _ = sender as? UIBarButtonItem{
+            let mapsViewController = segue.destination as! MapsViewController
+            mapsViewController.businesses = businesses
+        }
+    }
+    
+    
+    
      
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }

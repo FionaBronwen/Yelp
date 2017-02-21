@@ -29,7 +29,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="127"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="beq-04-qJa" id="vbj-oZ-9TQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="126"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="126.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8Iq-eD-svh">
@@ -127,8 +127,16 @@
                             <constraint firstItem="C8h-mZ-nrS" firstAttribute="top" secondItem="XhR-oz-92f" secondAttribute="top" id="f9s-hS-j8Y"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Yelp" id="5uq-sr-uoQ"/>
+                    <navigationItem key="navigationItem" title="Yelp" id="5uq-sr-uoQ">
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="4kF-oj-xKD">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="o0n-LA-U6C" kind="show" id="kRC-GP-P8G"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="mapButton" destination="4kF-oj-xKD" id="o6m-ub-Vxs"/>
                         <outlet property="tableView" destination="C8h-mZ-nrS" id="5U4-cp-gNr"/>
                     </connections>
                 </viewController>
@@ -136,14 +144,48 @@
             </objects>
             <point key="canvasLocation" x="2727.1999999999998" y="357.57121439280365"/>
         </scene>
+        <!--Maps View Controller-->
+        <scene sceneID="28Q-SA-HKZ">
+            <objects>
+                <viewController id="o0n-LA-U6C" customClass="MapsViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UCN-ac-IY3"/>
+                        <viewControllerLayoutGuide type="bottom" id="1hO-DN-UyJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="MJI-Fz-WS8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="mwq-b2-1Mq">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="mwq-b2-1Mq" firstAttribute="top" secondItem="MJI-Fz-WS8" secondAttribute="top" id="7kk-w8-bIP"/>
+                            <constraint firstItem="mwq-b2-1Mq" firstAttribute="leading" secondItem="MJI-Fz-WS8" secondAttribute="leading" id="9tf-gO-dTg"/>
+                            <constraint firstAttribute="trailing" secondItem="mwq-b2-1Mq" secondAttribute="trailing" id="UnQ-LN-6qr"/>
+                            <constraint firstItem="1hO-DN-UyJ" firstAttribute="top" secondItem="mwq-b2-1Mq" secondAttribute="bottom" id="mtU-QM-ZSD"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="mwq-b2-1Mq" id="ckB-rT-VfF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JaM-Md-Nsb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3448.8000000000002" y="355.7721139430285"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="nnR-Nc-zjL">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cJ1-lH-1iR" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1tY-Nu-epm">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="1tY-Nu-epm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.82745098039215681" green="0.13725490196078433" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
